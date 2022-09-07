@@ -5,9 +5,12 @@ var playerAttack = 10;
 var playerMoney = 10;
 
 
-console.log(playerName, playerAttack, playerHealth);
+var enemyNames = ["Roberto", "Amy Android", "Robo Trumble"];
+console.log(enemyNames.length);
 
-var enemyName = "Roberto";
+for(var i = 0; i < enemyNames.length; i++) {
+    console.log(enemyNames[i]);
+  }
 var enemyHealth = 50;
 var enemyAttack = 12;
 
@@ -57,8 +60,11 @@ if (promptFight === "fight" || promptFight === "FIGHT") {
  } 
 };
 
-fight();
+//fight();
   
+var fight = function(enemyName) {
+    // fight function statements
+}
 enemyHealth = enemyHealth - playerAttack;
 
 
