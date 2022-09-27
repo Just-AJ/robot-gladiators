@@ -5,7 +5,7 @@ var playerMoney = 10;
 
 
 var enemyNames = ["Roberto", "Amy Android", "Robo Trumble"];
-var enemyHealth = 50;
+var enemyHealth = randomNumber(40, 60);
 var enemyAttack = 12;
 
 console.log(enemyNames);
@@ -29,7 +29,7 @@ var fight = function(enemyName) {
             if (confirmSkip) {
               window.alert(playerName + ' has decided to skip this fight. Goodbye!');
               // subtract money from playerMoney for skipping
-              playerMoney = playerMoney - 10;
+              playerMoney = Math.max(0, playerMoney - 10);
               console.log("playerMoney", playerMoney)
               break;
             }
@@ -37,7 +37,9 @@ var fight = function(enemyName) {
 
 
     // remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth = enemyHealth - playerAttack;
+    var damage = randomNumber(playerAttack- 3, playerAttack);
+
+    enemyHealth = Math.max(0, enemyHealth - damage);
     console.log(
       playerName + " attacked " + enemyNames + ". " + enemyNames + " now has " + enemyHealth + " health remaining."
     );
@@ -56,9 +58,11 @@ var fight = function(enemyName) {
     }
   
       // remove player's health by subtracting the amount set in the enemyAttack variable
-    playerHealth = playerHealth - enemyAttack;
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+    playerHealth = Math.max(0, playerHealth - damage);
     console.log(
-      enemyNames + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining."
+      enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining."
     );    
   
     // check player's health
@@ -71,32 +75,6 @@ var fight = function(enemyName) {
  } //end of while loop
 }; //end of fight function
 
-//fight each enemy-robot by looping over them and fighting the one at at time
-for (var i = 0; i < enemyNames.length; i++) {
-   //if player is still alive, keep fighting
-   if (playerHealth > 0) {
-    //lets the player know which round they are in
-    window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
-   
-
-  //pick new enemy to fight based on the index of the enemyNames array
-    var pickedEnemyName = enemyNames [i];
-  //reset enemyHealth before startng new fight
-    enemyHealth = 50;
-
-  //use the debugger to pause the script and do error adjustemnts
-  //debugger;
-
-  fight(pickedEnemyName);
-}
-
-  //if the player isn't alive, stop the game
-else {
-  window.alert('You have lost your robot in battle! Game Over!');
-  break;
-}
- }
-
  //function to start new game
  var startGame= function() {
   // reset player stats
@@ -104,34 +82,63 @@ else {
   playerAttack = 10;
   playerMoney = 10;
 
-  for (var i = 0; i < enemyNames.length; i++) {
-    if (playerHealth > 0) {
-      window.alert("Welcome to Robot Gladiators! Round" + (i + 1));
+//fight each enemy-robot by looping over them and fighting the one at at time
+for (var i = 0; i < enemyNames.length; i++) {
+  //if player is still alive, keep fighting
+  if (playerHealth > 0) {
+    //lets the player know which round they are in
+    window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
+  
+   //pick new enemy to fight based on the index of the enemyNames array
+   var pickedEnemyName = enemyNames[i];
 
-      var pickedEnemyName = enemyNames[i];
+   //reset enemyHealth before startng new fight
+   var enemyHealth = randomNumber(40, 60);
 
-      enemyHealth = 50;
 
-      fight(pickedEnemyName);
 
-      // if we're not at the last enemy in the array
-      if (playerHealth > 0 && i < enemyNames.length - 1) {
-// ask if player wants to use the store
-var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+   fight(pickedEnemyName);
 
-//if yes, take them to the store() function
-if (storeConfirm){
+    // if we're not at the last enemy in the array
+    if (playerHealth > 0 && i < enemyNames.length - 1) {
+      // ask if player wants to use the store
+      var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+
+    //if yes, take them to the store() function
+    if (storeConfirm){
         shop();
-        }
-   }
-}     
-    else {
-      window.alert("You have lost your robot in battle! Game Over!");
-      break;
-       endGame();
     }
   }
-  var shop = function () {
+}
+//if player is not alive, break out of the loop and let endGame function run
+    else {
+      window.alert("You have lost your robot in battle! Game Over!");
+      break;  
+    }
+  }
+  endGame(); 
+ };
+
+ var endGame = function() {
+  if (playerHealth > 0){
+    window.alert("Good job, you've survived the game! You now have a score of" + playerMoney + ".");
+  }
+  else {
+  window.alert("You have lost your robot in battle.");
+ };
+//play again confirmation
+var playAgainConfirm = window.confirm("Would you like to play again?");
+
+if (playAgainConfirm) {
+  //restart game
+  startGame();
+}
+else {
+  window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+  }
+};
+ 
+var shop = function () {
    var shopOptionPrompt = window.prompt(
     "Would you like to REFILL your health, UPGRADE your attack or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
    );
@@ -175,31 +182,14 @@ if (storeConfirm){
           shop();
           break;
     }
-
   };
-   startGame();
- };
 
- var endGame = function() {
-  if (playerHealth > 0){
-    window.alert("Good job, you've survived the game! You now have a score of" + playerMoney + ".");
-  }
-  else {
-  window.alert("You have lost your robot in battle.");
- };
-};
+  // function to generate a random numeric value
+  var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
 
-//play again confirmation
+    return value;
+  };
 
-var playAgainConfirm = window.confirm("Would you like to play again?");
-
-if (playAgainConfirm) {
-  //restart game
-  startGame();
-}
-
-else {
-  window.alert("Thank you for playing Robot Gladiators! Come back soon!");
-}
- 
-
+//start first game when page loads
+startGame();
