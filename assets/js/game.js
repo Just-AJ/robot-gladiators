@@ -83,9 +83,8 @@ for (var i = 0; i < enemyInfo.length; i++) {
    //pick new enemy to fight based on the index of the enemy.names array
    var pickedEnemyObj = enemyInfo[i];
 
-   //reset enemy.health before startng new fight
-   var pickedEnemyObj.health = randomNumber(40, 60);
-
+   //set health for picked enemy
+   pickedEnemyObj.health = randomNumber(40, 60);
 
 
    fight(pickedEnemyObj);
