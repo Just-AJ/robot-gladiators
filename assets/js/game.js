@@ -84,7 +84,7 @@ for (var i = 0; i < enemyInfo.length; i++) {
    var pickedEnemyObj = enemyInfo[i];
 
    //reset enemy.health before startng new fight
-   var pickedEnemyObj.health = randomNumber(40, 60);
+  pickedEnemyObj.health = randomNumber(40, 60);
 
 
 
