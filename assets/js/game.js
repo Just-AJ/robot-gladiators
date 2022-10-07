@@ -1,9 +1,11 @@
+/*GAME FUNCTIONS*/
+  // function to generate a random numeric value
+  var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
 
-
-//console.log(enemyInfo.name);
-//console.log(enemyInfo.length);
-//console.log(enemyInfo.name[0]);
-//console.log(enemyInfo.name[3]);
+    return value;
+  };
+  
 var fight = function(enemy) {
   //keep track of who goes first
   var isPlayerTurn = true;
@@ -122,23 +124,34 @@ for (var i = 0; i < enemyInfo.length; i++) {
   endGame(); 
  };
 
- var endGame = function() {
-  if (playerInfo.health > 0){
-    window.alert("Good job, you've survived the game! You now have a score of" + playerInfo.money + ".");
+var endGame = function() {
+  window.alert("The game has now ended. Let's see how you did!");
+
+  //check localStorage for high score, if it's not there, use 0
+  var highScore = localStorage.getItem("highscore");
+  if (highScore === null){
+    highScore = 0;
   }
-  else {
-  window.alert("You have lost your robot in battle.");
- };
-//play again confirmation
+
+//if a player has more money than the high score, player has new high score
+if (playerInfo.money > highScore) {
+  localStorage.setItem("highscore", playerInfo.money);
+  localStorage.setItem("name", playerInfo.name);
+
+alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");  
+}
+else {
+  alert(playerInfo.name + " did not beat the high score of " + highScore + " . Maybe next time!");
+}
+
+//ask player if they'd like to play again
 var playAgainConfirm = window.confirm("Would you like to play again?");
 
 if (playAgainConfirm) {
-  //restart game
   startGame();
-}
-else {
-  window.alert("Thank you for playing Robot Gladiators! Come back soon!");
-  }
+  } else{
+    window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+ }
 };
  
 var shop = function () {
@@ -163,13 +176,6 @@ shopOptionPrompt = parseInt(shopOptionPrompt);
      break;
     };
   }
-
-  // function to generate a random numeric value
-  var randomNumber = function(min, max) {
-    var value = Math.floor(Math.random() * (max - min + 1) + min);
-
-    return value;
-  };
 
 // function to set name
 var getPlayerName = function() {
