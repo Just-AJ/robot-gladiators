@@ -9,21 +9,44 @@
 
 var fight = function(enemy) {
 
-  while(playerInfo.health > 0 && enemyInfo.health > 0) {
+  while(playerInfo.health > 0 && enemy.health > 0) {
    
-    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.")
-  
-     // if player picks "skip" confirm and then stop the loop
-       if (promptFight === "skip" || promptFight === "SKIP") {
-       // confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-      
-            // if yes (true), leave fight
-            if (confirmSkip) {
-              window.alert(playerInfo.name + ' has decided to skip this fight. Goodbye!');
-              // subtract money from playerInfo.money for skipping
-              playerInfo.money = Math.max(0, playerInfo.money - 10);
-              console.log("playerInfo.money", playerInfo.money)
+  var fightOrSkip = function() {
+  // ask player if they'd like to fight or skip using fightOrSkip function
+  var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+  // Enter the conditional recursive function call here!
+  if (promptFight === "" || promptFight === null) {
+    window.alert("You need to provide a valid answer! Please try again.")
+    return fightOrSkip();
+  }
+
+  //repeat and execute as long as the enemy robot is alive
+  while (playerInfo.health > 0 && enemy.health > 0) {
+    if (fightOrSkip()){
+      //if true leave fight by breaking loop
+      break;
+    }
+    var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+  }
+
+  // if player picks "skip" confirm and then stop the loop
+  if (promptFight === "skip" || promptFight === "SKIP") {
+    // confirm player wants to skip
+    var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+    // if yes (true), leave fight
+    if (confirmSkip) {
+      window.alert(playerInfo.name + "has decided to skip the fight. Goodbye!");
+      // subtract money from playerMoney for skipping but don't let them go into the negative
+      playerInfo.money = Math.max(0, playerInfo.money - 10);
+
+      //return true if player wants to leave
+      return true;
+    }
+
+  }
+}
               break;
             }
           }   
@@ -32,22 +55,23 @@ var fight = function(enemy) {
     // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
     var damage = randomNumber(playerInfo.attack- 3, playerInfo.attack);
 
-    enemyInfo.health = Math.max(0, enemyInfo.health - damage);
+    enemy.health = Math.max(0, enemy.health - damage);
     console.log(
-      playerInfo.name + " attacked " + enemyInfo.name + ". " + enemyInfo.name + " now has " + enemyInfo.health + " health remaining."
+      playerInfo.name + " attacked " + enemyInfo.name + ". " + enemyInfo.name + " now has " + enemy.health + " health remaining."
     );
 
     
     // check enemy's health
-    if (enemyInfo.health <= 0) {
-      window.alert(enemy.name + " has died!");
+    if (enemy.health <= 0) {
+      window.alert(enemyInfo.name + " has died!");
 
       //award player money for winning
       playerInfo.money = playerInfo.money + 20;
 
     break;
-    } else {
-      window.alert(enemy.name + " still has " + enemyInfo.health + " health left.");
+    } 
+    else {
+      window.alert(enemyInfo.name + " still has " + enemy.health + " health left.");
     }
   
       // remove player's health by subtracting the amount set in the enemy.attack variable
@@ -55,7 +79,7 @@ var fight = function(enemy) {
 
     playerInfo.health = Math.max(0, playerInfo.health - damage);
     console.log(
-      enemy.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
+      enemyInfo.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
     );    
   
     // check player's health
@@ -65,8 +89,8 @@ var fight = function(enemy) {
       window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
     } 
  
- } //end of while loop
-}; //end of fight function
+ //end of while loop
+ //end of fight function
 
  //function to start new game
  var startGame= function() {
@@ -83,7 +107,7 @@ for (var i = 0; i < enemyInfo.length; i++) {
    //pick new enemy to fight based on the index of the enemyInfo.name array
    var pickedEnemyObj = enemyInfo[i];
 
-   //reset enemyInfo.health before startng new fight
+   //reset enemy.health before startng new fight
   pickedEnemyObj.health = randomNumber(40, 60);
 
 
